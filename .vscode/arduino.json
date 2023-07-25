@@ -1,0 +1,8 @@
+{
+    "sketch": "Arduino.ino",
+    "output": "build",
+    "configuration": "cpu=atmega2560",
+    "board": "arduino:avr:mega",
+    "port": "/dev/tty.usbmodem212301",
+    "programmer": "arduinoisp"
+}
