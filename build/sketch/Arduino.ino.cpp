@@ -3,40 +3,53 @@
 /***********************************************************
 Empty project skeleton
 *************************************************************/
-int notes[] = {262, 294, 330, 349};
+const int tiltSwitchPin = 8;
+unsigned long previousTime = 0;
+int switchState = 0;
+int prevSwitchState = 0;
+int led = 2;
+long interval = 10000;
 
-#line 6 "/Users/emilbelyov/Projects/Arduino Project/Arduino/Arduino.ino"
-void setup();
 #line 11 "/Users/emilbelyov/Projects/Arduino Project/Arduino/Arduino.ino"
+void setup();
+#line 21 "/Users/emilbelyov/Projects/Arduino Project/Arduino/Arduino.ino"
 void loop();
-#line 6 "/Users/emilbelyov/Projects/Arduino Project/Arduino/Arduino.ino"
+#line 11 "/Users/emilbelyov/Projects/Arduino Project/Arduino/Arduino.ino"
 void setup()
 {
-    Serial.begin(9600);
+    for (int x = 2; x < 8; x++)
+    {
+        pinMode(x, OUTPUT);
+    }
+
+    pinMode(tiltSwitchPin, INPUT);
 }
 
 void loop()
 {
-    int keyVal = analogRead(A0);
-    Serial.println(keyVal);
+    unsigned long currentTime = millis();
+    if (currentTime - previousTime > interval)
+    {
+        previousTime = currentTime;
+        digitalWrite(led, HIGH);
+        led++;
+        if (led == 7)
+        {
+            // turoff
+        }
+    }
 
-    if (keyVal == 1023)
+    switchState = digitalRead(tiltSwitchPin);
+    if (switchState != prevSwitchState)
     {
-        tone(8, notes[0]);
+        for (int x = 2; x < 8; x++)
+        {
+            digitalWrite(x, LOW);
+        }
+
+        led = 2;
+        previousTime = currentTime;
     }
-    else if (keyVal >= 850 && keyVal <= 1010)
-    {
-        tone(8, notes[1]);
-    }
-    else if (keyVal >= 100 && keyVal <= 850)
-    {
-        tone(8, notes[2]);
-    }
-    else if (keyVal >= 90 && keyVal <= 100)
-    {
-        tone(8, notes[3]);
-    } else 
-    {
-        noTone(8);
-    }
+
+    prevSwitchState = switchState;
 }
